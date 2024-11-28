@@ -3,6 +3,8 @@ const timerMinute = document.getElementById('timer-minute');
 const timerSeconds = document.getElementById('timer-second');
 const startTimer = document.getElementById('start-timer');
 const timeInputs = document.querySelectorAll('.set-time');
+const timersList = document.getElementById('timers-list-container');
+// const timers = [];
 
 timerHour.contentEditable = true;
 timerMinute.contentEditable = true;
@@ -23,6 +25,13 @@ function selection(element) {
 
 timerHour.addEventListener("input", function () {
     inputValidation(this);
+    timeInputs.forEach(timeHand => {
+        if (timeHand != timerHour) {
+            if (!/^\d+$/.test(timeHand.textContent)) {
+                timeHand.textContent = 0;
+            }
+        }
+    });
 });
 
 timerMinute.addEventListener("input", function () {
@@ -61,8 +70,6 @@ function inputOutOfBounds(element) {
     })
 }
 
-
-
 function inputValidation(element) {
     let value = element.textContent.trim();
     if (/^\d+$/.test(value)) {
@@ -71,9 +78,78 @@ function inputValidation(element) {
             value = element.textContent;
             element.blur();
         }
-    } else {
+    }
+    else {
         element.textContent = 0;
         value = 0;
     }
     return value;
+}
+
+isAnyTimer()
+
+startTimer.addEventListener("click", () => {
+    let hour = parseInt(timerHour.textContent);
+    let minute = parseInt(timerMinute.textContent);
+    let second = parseInt(timerSeconds.textContent);
+
+    let totalSeconds = hour * 3600 + minute * 60 + second;
+
+    if (totalSeconds > 0) {
+
+        const timerDiv = document.createElement('p');
+
+        const timerId = setInterval(() => {
+            totalSeconds--;
+            const hours = Math.floor(totalSeconds / 3600); // 0 
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            // console.log(hours, minutes, seconds);
+
+            timerDiv.innerHTML = `
+                Time left:
+                    <span class ="timer-remaining-hour">${hours}</span>
+                    :
+                    <span class ="timer-remaining-minute">${minutes}</span>
+                    :
+                    <span class ="timer-remaining-second">${seconds}</span>
+                    <button class ="delete-timer" onClick=delTimer(${timerId}) >Delete</button>
+            
+            `;
+
+
+            if (totalSeconds === 0) {
+                clearInterval(timerId);
+                alert("Time's up!");
+            }
+        }, 1000);
+
+        timerDiv.dataset.id = timerId;
+        timerDiv.classList.add('timer');
+        timersList.appendChild(timerDiv);
+        // timers.push(timerId);
+    }
+    isAnyTimer();
+})
+
+function delTimer(timerId) {
+    const timerDiv = document.querySelector(`[data-id="${timerId}"]`);
+    console.log(timerDiv);
+    clearInterval(timerId);
+    timersList.removeChild(timerDiv);
+    // timers = timers.filter(id => id!== timerId);
+    isAnyTimer();
+
+}
+
+function isAnyTimer() {
+    if (!document.querySelectorAll(".timer").length) {
+        // console.log("aszfsdfsd");
+        timersList.innerHTML = `
+        <p id = "no-timer">You have no timers currently!</p>
+    `;
+    } else {
+        document.getElementById("no-timer").remove();
+    }
 }
