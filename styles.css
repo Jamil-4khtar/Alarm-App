@@ -1,0 +1,81 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    font-family: Roboto, 'Open Sans';
+    background: #1D1D23;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#app-container {
+    width: 65%;
+    height: 100%;
+    padding: 20px;
+}
+
+.set-timer, .timer, .timer-up {
+    background: #34344A;
+    margin: 20px;
+    padding: 30px 10px 30px 10px;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#timer-hour, #timer-minute, #timer-second {
+    text-decoration: underline;
+    font-size: 1.3em;
+}
+
+.timer span {
+    font-size: 1.3em;
+
+}
+
+
+button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80px;
+    background: #F0F757;
+}
+
+#timers-display h3 {
+    margin: 10px;
+    font-size: 1em;
+    font-weight: 400;
+    background: #39393E;
+    width: 150px;
+    justify-self: center;
+    padding: 10px;
+    border-radius: 2em;
+}
+
+.timer-up {
+    background: #F0F757;
+    color: #39393E;
+    font-size: 1.4em;
+    font-weight: 500;
+    padding-left: 80px;
+    gap: 10px;
+
+}
+.timer-up button {
+    background: #34344A;
+    color: #FFFFFF;
+}
+#no-timer {
+    padding: 10px;
+    margin: 10px;
+}

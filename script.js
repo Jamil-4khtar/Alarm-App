@@ -28,7 +28,7 @@ timerHour.addEventListener("input", function () {
     timeInputs.forEach(timeHand => {
         if (timeHand != timerHour) {
             if (!/^\d+$/.test(timeHand.textContent)) {
-                timeHand.textContent = 0;
+                timeHand.innerText = String(0).padStart(2, '0');
             }
         }
     });
@@ -49,41 +49,44 @@ timerSeconds.addEventListener("input", function () {
 function inputOutOfBounds(element) {
     timeInputs.forEach(timeHand => {
         if (element == timeHand) {
-            if (timeHand.textContent == 60) {
-                timeHand.textContent = 0;
+            if (timeHand.innerText == 60) {
+                timeHand.innerText = String(0).padStart(2, '0');
                 let upperHandValue = timeHand.previousElementSibling.textContent;
                 if (/^\d+$/.test(upperHandValue)) {
-                    timeHand.previousElementSibling.textContent = parseInt(upperHandValue) + 1;
+                    let newValue = parseInt(upperHandValue) + 1;
+                    timeHand.previousElementSibling.textContent = newValue.toString().padStart(2, '0');
                     timeHand.blur()
                 }
                 else {
                     timeHand.previousElementSibling.textContent = 1;
                 }
-            } else if (timeHand.textContent > 60) {
-                timeHand.textContent = 0;
-            }
+            } /* else if (timeHand.textContent > 60) {
+                timeHand.textContent = String(0).padStart(2, '0');
+            } */
         } else {
             if (!/^\d+$/.test(timeHand.textContent)) {
-                timeHand.textContent = 0;
+                timeHand.textContent = String(0).padStart(2, '0');
             }
         }
     })
 }
 
 function inputValidation(element) {
-    let value = element.textContent.trim();
-    if (/^\d+$/.test(value)) {
-        if (value.length > 2) {
-            element.textContent = value.slice(0, 2)
-            value = element.textContent;
+    let val = element.innerText.trim();
+    if (/^\d+$/.test(val)) {
+
+        if (val.length == 1) {
+            element.innerText = "0" + val;
+        }
+        if (val.length > 1) {
+            element.innerText = val.slice(2) + val.slice(0, 1);
             element.blur();
         }
+
     }
     else {
-        element.textContent = 0;
-        value = 0;
+        element.innerText = String(0).padStart(2, '0');
     }
-    return value;
 }
 
 isAnyTimer()
@@ -109,11 +112,13 @@ startTimer.addEventListener("click", () => {
 
             timerDiv.innerHTML = `
                 Time left:
-                    <span class ="timer-remaining-hour">${hours}</span>
-                    :
-                    <span class ="timer-remaining-minute">${minutes}</span>
-                    :
-                    <span class ="timer-remaining-second">${seconds}</span>
+                    <span>
+                        <span class ="timer-remaining-hour">${String(hours).padStart(2, '0')}</span>
+                        :
+                        <span class ="timer-remaining-minute">${String(minutes).padStart(2, '0')}</span>
+                        :
+                        <span class ="timer-remaining-second">${String(seconds).padStart(2, '0')}</span>
+                    </span>
                     <button class ="delete-timer" onClick=delTimer(${timerId}) >Delete</button>
             
             `;
@@ -121,7 +126,14 @@ startTimer.addEventListener("click", () => {
 
             if (totalSeconds === 0) {
                 clearInterval(timerId);
-                alert("Time's up!");
+                // alert("Time's up!");
+                timerDiv.innerHTML = `
+                    <span>Timer Is Up !</span>
+                    <button class ="stop-timer" onClick=delTimer(${timerId}) >Stop</button>
+                `;
+                timerDiv.classList.add("timer-up");
+                document.getElementById('buzzer').play();
+
             }
         }, 1000);
 
@@ -143,13 +155,30 @@ function delTimer(timerId) {
 
 }
 
+// function isAnyTimer() {
+//     if (!document.querySelectorAll(".timer").length) {
+//         // console.log("aszfsdfsd");
+//         timersList.innerHTML = `
+//         <p id = "no-timer">You have no timers currently!</p>
+//     `;
+//     } else {
+//         document.getElementById("no-timer").remove();
+//     }
+// }
 function isAnyTimer() {
+    const noTimerElement = document.getElementById("no-timer");
+
     if (!document.querySelectorAll(".timer").length) {
-        // console.log("aszfsdfsd");
+        if (noTimerElement) {
+            // Remove the element only if it exists.
+            noTimerElement.remove();
+        }
         timersList.innerHTML = `
-        <p id = "no-timer">You have no timers currently!</p>
-    `;
+            <p id="no-timer">You have no timers currently!</p>
+        `;
     } else {
-        document.getElementById("no-timer").remove();
+        if (noTimerElement) {
+            noTimerElement.remove();
+        }
     }
 }

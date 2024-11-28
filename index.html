@@ -16,21 +16,24 @@
 
 <body>
     <div id="app-container">
-        <h1>Multiple Timer App</h1>
+        <h2>Multiple Timer App</h2>
 
         <div id="timer-setting-container">
-            <p>Set Time:
-                <span id="timer-hour" class="set-time">hh</span>
-                :
-                <span id="timer-minute" class="set-time">mm</span>
-                :
-                <span id="timer-second" class="set-time">ss</span>
-                <button id="start-timer">Set</button>
+            <p class="set-timer">
+                Set Time:
+                <span>
+                    <span id="timer-hour" class="set-time">hh</span>
+                    :
+                    <span id="timer-minute" class="set-time">mm</span>
+                    :
+                    <span id="timer-second" class="set-time">ss</span>
+                </span>
+            <button id="start-timer">Set</button>
             </p>
         </div>
 
         <div id="timers-display">
-            <h2>Current Timers</h2>
+            <h3>Current Timers</h3>
             <div id="timers-list-container">
                 <!-- Timer items will be dynamically added here -->
                 <!-- <p>Time left:
@@ -44,6 +47,7 @@
             </div>
         </div>
     </div>
+    <audio id="buzzer" src="./loud-buzzer-100567.mp3"></audio>
     <script src="./script.js"></script>
 </body>
 
